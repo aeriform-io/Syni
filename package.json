@@ -19,6 +19,9 @@
   "dependencies": {
     "babel": "^6.3.26",
     "babel-core": "^6.4.5",
+    "bytes": "^2.2.0",
+    "filesize": "^3.2.0",
+    "stately": "^0.1.2",
     "yargs": "^3.32.0"
   },
   "devDependencies": {
