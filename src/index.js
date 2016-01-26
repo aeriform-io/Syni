@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 import argv       from 'yargs';
-import async      from 'async';
 import shuffle    from 'knuth-shuffle';
 import colors     from 'colors/safe';
 import os         from 'os';
@@ -9,7 +8,7 @@ import bytes      from './bytes';
 
 /**
  * Example
- * osk  --type tga -start-id 0 --render --write-with 4     \
+ * osk --type tga -start-id 0 --render --write-with 4      \
  * --write-delay 5m --prefix frame --write 5:25mb,10:10kb  \
  * --shuffle
 **/

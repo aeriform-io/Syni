@@ -25,7 +25,6 @@
     "colors": "^1.1.2",
     "filesize": "^3.2.0",
     "knuth-shuffle": "^1.0.1",
-    "stately": "^0.1.2",
     "yargs": "^3.32.0"
   },
   "devDependencies": {
