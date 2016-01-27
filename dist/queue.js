@@ -35,17 +35,19 @@ var Queue = function Queue() {
   this.queue = _async2.default.queue(function (task, callback) {
     var name = (options.prefix || 'frame') + '_' + _this.tasks++ + '.' + options.type;
     var file = _fs2.default.createWriteStream(name);
-    file.write('', 'utf8', function () {
-      if (options['write-delay']) {
-        _this.queue.pause();
+    if (options['zero-byte']) {
+      file.write('', 'utf8', function () {
         setTimeout(function () {
-          return _this.queue.resume();
-        }, options['write-delay']);
-      }
-    });
-    file.write(_headers2.default[options.type]);
-    file.write((0, _bytes2.default)(task));
-    file.end();
+          file.write(_headers2.default[options.type]);
+          file.write((0, _bytes2.default)(task));
+          file.end();
+        }, options['write-delay'] || 5);
+      });
+    } else {
+      file.write(_headers2.default[options.type]);
+      file.write((0, _bytes2.default)(task));
+      file.end();
+    }
     file.on('finish', function () {
       console.log('Osk is writing %s...', name);
       callback();

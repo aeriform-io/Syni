@@ -63,5 +63,11 @@ const _writes = _argv.write
 const writes = (!!_argv.shuffle) ? shuffle.knuthShuffle(_writes) : _writes;
 
 // Go.
-const queue = new Queue(_argv)
-  .push(writes);
+const queue = new Queue(_argv);
+queue
+  .push(writes, () => {
+    if (_argv['write-delay'] && !_argv['zero-byte']) {
+      queue.pause();
+      setTimeout(() => queue.resume(), _argv['write-delay']);
+    }
+});

@@ -9,15 +9,19 @@ export default class Queue {
     this.queue = async.queue((task, callback) => {
       const name = `${options.prefix || 'frame'}_${this.tasks++}.${options.type}`;
       const file = fs.createWriteStream(name);
-      file.write('','utf8', () => {
-        if (options['write-delay']) {
-          this.queue.pause();
-          setTimeout(() => this.queue.resume(), options['write-delay']);
-        }
-      });
-      file.write(header[options.type]);
-      file.write(bytes(task));
-      file.end();
+      if (options['zero-byte']) {
+        file.write('','utf8', () => {
+          setTimeout(() => {
+            file.write(header[options.type]);
+            file.write(bytes(task));
+            file.end();
+          }, options['write-delay'] || 5);
+        });
+      } else {
+        file.write(header[options.type]);
+        file.write(bytes(task));
+        file.end();
+      }
       file.on('finish', () => {
         console.log('Osk is writing %s...', name);
         callback();

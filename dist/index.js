@@ -57,4 +57,12 @@ var _writes = _argv.write.split(',').map(function (e) {
 var writes = !!_argv.shuffle ? _knuthShuffle2.default.knuthShuffle(_writes) : _writes;
 
 // Go.
-var queue = new _queue2.default(_argv).push(writes);
+var queue = new _queue2.default(_argv);
+queue.push(writes, function () {
+  if (_argv['write-delay'] && !_argv['zero-byte']) {
+    queue.pause();
+    setTimeout(function () {
+      return queue.resume();
+    }, _argv['write-delay']);
+  }
+});
