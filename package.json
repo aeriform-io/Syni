@@ -17,6 +17,10 @@
     "url": "https://github.com/madebyflame/osk/issues"
   },
   "homepage": "https://github.com/madebyflame/osk#readme",
+  "preferGlobal": true,
+  "bin": {
+    "osk": "dist/index.js"
+  },
   "dependencies": {
     "async": "^1.5.2",
     "babel": "^6.3.26",

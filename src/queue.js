@@ -9,6 +9,12 @@ export default class Queue {
     this.queue = async.queue((task, callback) => {
       const name = `${options.prefix || 'frame'}_${this.tasks++}.${options.type}`;
       const file = fs.createWriteStream(name);
+      file.write('','utf8', () => {
+        if (options['write-delay']) {
+          this.queue.pause();
+          setTimeout(() => this.queue.resume(), options['write-delay']);
+        }
+      });
       file.write(header[options.type]);
       file.write(bytes(task));
       file.end();

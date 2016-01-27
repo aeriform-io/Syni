@@ -23,7 +23,8 @@ const _argv = argv
     '--write-delay, -d [relative time]               (default: 5ms) (--render)',
     '--prefix, -p      [string]                      (default: frame)',
     '--write, -w       [num:filesize,...]',
-    '--render                                        (optional)',
+    '--render, -r                                    (optional)',
+    '--zero-byte, -z                                 (optional)     (--render)',
     '--shuffle                                       (optional)',
     '',
     colors.underline('Examples.'),
@@ -41,6 +42,8 @@ const _argv = argv
   .alias('i',    'start-id')
   .alias('c',  'write-with')
   .alias('d', 'write-delay')
+  .alias('z',   'zero-byte')
+  .alias('r',      'render')
   .alias('p',      'prefix')
   .alias('w',       'write')
   .epilog(`Copyright (C) ${new Date().getFullYear()}`)
@@ -60,11 +63,5 @@ const _writes = _argv.write
 const writes = (!!_argv.shuffle) ? shuffle.knuthShuffle(_writes) : _writes;
 
 // Go.
-const queue = new Queue(_argv);
-
-queue.push(writes, () => {
-  if (_argv['with-delay']) {
-    queue.pause();
-    setTimeout(() => queue.resume(), _argv['with-delay']);
-  }
-});
+const queue = new Queue(_argv)
+  .push(writes);
