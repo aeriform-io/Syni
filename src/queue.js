@@ -5,30 +5,51 @@ import bytes   from './bytes';
 
 export default class Queue {
   constructor(options={}) {
-    this.tasks = options['start-id'] || 0;
+    this.tasks  = options['start-id'] || 0;
+    this.called = false;
     this.queue = async.queue((task, callback) => {
-      const name = `${options.prefix || 'frame'}_${this.tasks++}.${options.type}`;
+      const name = `${options.prefix || 'frame'}_${this.tasks++}.${options.type || png}`;
       const file = fs.createWriteStream(name);
       if (options['zero-byte']) {
         file.write('','utf8', () => {
           setTimeout(() => {
-            file.write(header[options.type]);
-            file.write(bytes(task));
-            file.end();
+            if (options['buffer-delay']) {
+              this.called = true;
+              callback();
+              setTimeout(() => {
+                file.write(header[options.type]);
+                file.write(bytes(task))
+                file.end();
+              }, options['buffer-delay']);
+            } else {
+              file.write(header[options.type]);
+              file.write(bytes(task));
+              file.end();
+            }
           }, options['write-delay'] || 5);
         });
       } else {
-        file.write(header[options.type]);
-        file.write(bytes(task));
-        file.end();
+        if (options['buffer-delay']) {
+          this.called = true;
+          callback();
+          setTimeout(() => {
+            file.write(header[options.type]);
+            file.write(bytes(task))
+            file.end();
+          }, options['buffer-delay']);
+        } else {
+          file.write(header[options.type]);
+          file.write(bytes(task));
+          file.end();
+        }
       }
       file.on('finish', () => {
         console.log('Osk is writing %s...', name);
-        callback();
+        if (!this.called) callback();
       })
     }, options['write-with'] || 1);
     this.queue.drain = () => {
-      console.log('done.');
+      if (!this.called) console.log('done.');
     };
     return this.queue;
   }

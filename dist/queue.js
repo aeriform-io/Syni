@@ -32,29 +32,50 @@ var Queue = function Queue() {
   _classCallCheck(this, Queue);
 
   this.tasks = options['start-id'] || 0;
+  this.called = false;
   this.queue = _async2.default.queue(function (task, callback) {
-    var name = (options.prefix || 'frame') + '_' + _this.tasks++ + '.' + options.type;
+    var name = (options.prefix || 'frame') + '_' + _this.tasks++ + '.' + (options.type || png);
     var file = _fs2.default.createWriteStream(name);
     if (options['zero-byte']) {
       file.write('', 'utf8', function () {
         setTimeout(function () {
-          file.write(_headers2.default[options.type]);
-          file.write((0, _bytes2.default)(task));
-          file.end();
+          if (options['buffer-delay']) {
+            _this.called = true;
+            callback();
+            setTimeout(function () {
+              file.write(_headers2.default[options.type]);
+              file.write((0, _bytes2.default)(task));
+              file.end();
+            }, options['buffer-delay']);
+          } else {
+            file.write(_headers2.default[options.type]);
+            file.write((0, _bytes2.default)(task));
+            file.end();
+          }
         }, options['write-delay'] || 5);
       });
     } else {
-      file.write(_headers2.default[options.type]);
-      file.write((0, _bytes2.default)(task));
-      file.end();
+      if (options['buffer-delay']) {
+        _this.called = true;
+        callback();
+        setTimeout(function () {
+          file.write(_headers2.default[options.type]);
+          file.write((0, _bytes2.default)(task));
+          file.end();
+        }, options['buffer-delay']);
+      } else {
+        file.write(_headers2.default[options.type]);
+        file.write((0, _bytes2.default)(task));
+        file.end();
+      }
     }
     file.on('finish', function () {
       console.log('Osk is writing %s...', name);
-      callback();
+      if (!_this.called) callback();
     });
   }, options['write-with'] || 1);
   this.queue.drain = function () {
-    console.log('done.');
+    if (!_this.called) console.log('done.');
   };
   return this.queue;
 };

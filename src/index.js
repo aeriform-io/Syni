@@ -17,15 +17,16 @@ import Queue      from './queue';
 // Initialize
 const _argv = argv
   .usage([colors.red('Usage:'),
-    '--type, -t        {jpg,png,sgi,tif,dpx,tga,exr} (default: png)',
-    '--start-id, -i    [num]                         (default: 0)',
-    '--write-with, -c  [num]                         (optional)     (--render)',
-    '--write-delay, -d [relative time]               (default: 5ms) (--render)',
-    '--prefix, -p      [string]                      (default: frame)',
-    '--write, -w       [num:filesize,...]',
-    '--render, -r                                    (optional)',
-    '--zero-byte, -z                                 (optional)     (--render)',
-    '--shuffle                                       (optional)',
+    '--type, -t         {jpg,png,sgi,tif,dpx,tga,exr} (default: png)',
+    '--start-id, -i     [num]                         (default: 0)',
+    '--write-with, -c   [num]                         (optional)     (--render)',
+    '--write-delay, -d  [relative time]               (default: 5ms) (--render)',
+    '--buffer-delay, -b [relative time]               (default: 0ms) (--render)',
+    '--prefix, -p       [string]                      (default: frame)',
+    '--write, -w        [num:filesize,...]',
+    '--render, -r                                     (optional)',
+    '--zero-byte, -z                                  (optional)     (--render)',
+    '--shuffle                                        (optional)',
     '',
     colors.underline('Examples.'),
     'osk --type png -i 5 --write 5:12kb',
@@ -36,16 +37,18 @@ const _argv = argv
       .replace(/(\(.+\))/,      colors.yellow('$1')))
     .join(os.EOL))
   .demand(['write'])
-  .implies('write-with',  'render')
-  .implies('write-delay', 'render')
-  .alias('t',        'type')
-  .alias('i',    'start-id')
-  .alias('c',  'write-with')
-  .alias('d', 'write-delay')
-  .alias('z',   'zero-byte')
-  .alias('r',      'render')
-  .alias('p',      'prefix')
-  .alias('w',       'write')
+  .implies('buffer-delay', 'render')
+  .implies('write-with',   'render')
+  .implies('write-delay',  'render')
+  .alias('t',         'type')
+  .alias('i',     'start-id')
+  .alias('c',   'write-with')
+  .alias('d',  'write-delay')
+  .alias('b', 'buffer-delay')
+  .alias('z',    'zero-byte')
+  .alias('r',       'render')
+  .alias('p',       'prefix')
+  .alias('w',        'write')
   .epilog(`Copyright (C) ${new Date().getFullYear()}`)
   .argv;
 
