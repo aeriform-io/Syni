@@ -9,17 +9,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/madebyflame/osk.git"
+    "url": "git+https://github.com/madebyflame/Syni.git"
   },
   "author": "Jahan Addison",
   "license": "SEE LICENSE FILE",
   "bugs": {
-    "url": "https://github.com/madebyflame/osk/issues"
+    "url": "https://github.com/madebyflame/Syni/issues"
   },
-  "homepage": "https://github.com/madebyflame/osk#readme",
+  "homepage": "https://github.com/madebyflame/Syni#readme",
   "preferGlobal": true,
   "bin": {
-    "osk": "dist/index.js"
+    "syni": "dist/index.js"
   },
   "dependencies": {
     "async": "^1.5.2",
