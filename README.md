@@ -2,6 +2,7 @@
 
 
 A tool that simulates rendering, developed for rapid testing of Ramma.
+www.madebyflame.com/syni
 
 ## Example
 
