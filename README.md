@@ -1,4 +1,6 @@
 <img src="https://dl.dropboxusercontent.com/u/10131836/syni_logo.svg" width="300">
+
+
 A tool that simulates rendering, developed for rapid testing of Ramma.
 
 ## Example
