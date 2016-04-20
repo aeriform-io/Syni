@@ -28,7 +28,7 @@ The images that Syni builds are valid in that they comply with their respective 
 Flag | Options | Additional
 --- | --- | ---
 '--type, -t     |   {jpg,png,sgi,tif,dpx,tga,exr} | (default: png)',
-'--start-id, -i |   [num]                         | (default: 0)',
+'--start-id, -i |   [num]                         | (default: 1)',
 '--write-with, -c |  [num]                        | (optional)     (--render)',
 '--write-delay, -d | [relative time]              | (default: 5ms) (--render)',
 '--prefix, -p  |    [string]                      | (default: frame)',

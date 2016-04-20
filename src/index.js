@@ -9,7 +9,7 @@ import Queue      from './queue';
 
 /**
  * Example
- * osk --type tga --start-id 0 --render --write-with 4      \
+ * syni --type tga --start-id 0 --render --write-with 4      \
  * --write-delay 5m --prefix frame --write 5:25mb,10:10kb  \
  * --shuffle
 **/
@@ -18,7 +18,7 @@ import Queue      from './queue';
 const _argv = argv
   .usage([colors.red('Usage:'),
     '--type, -t        {jpg,png,sgi,tif,dpx,tga,exr} (default: png)',
-    '--start-id, -i    [num]                         (default: 0)',
+    '--start-id, -i    [num]                         (default: 1)',
     '--write-with, -c  [num]                         (optional)     (--render)',
     '--write-delay, -d [relative time]               (default: 5ms) (--render)',
     '--prefix, -p      [string]                      (default: frame)',
@@ -28,8 +28,8 @@ const _argv = argv
     '--shuffle                                       (optional)',
     '',
     colors.underline('Examples.'),
-    'osk --type png -i 5 --write 5:12kb',
-    'osk --type dpx --render --write 5:10.2mb,3:10.4mb,8:10mb --shuffle'
+    'syni --type png -i 5 --write 5:12kb',
+    'syni --type dpx --render --write 5:10.2mb,3:10.4mb,8:10mb --shuffle'
   ]
     .map(e => e
       .replace(/([\{\[].+[\}\]])/, colors.blue('$1'))
@@ -61,6 +61,9 @@ const _writes = _argv.write
 
 // Shuffle?
 const writes = (!!_argv.shuffle) ? shuffle.knuthShuffle(_writes) : _writes;
+
+// Size of collection
+_argv.size = _writes.length;
 
 // Go.
 const queue = new Queue(_argv);

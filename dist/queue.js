@@ -31,9 +31,11 @@ var Queue = function Queue() {
 
   _classCallCheck(this, Queue);
 
-  this.tasks = options['start-id'] || 0;
+  this.tasks = options['start-id'] || 1;
   this.queue = _async2.default.queue(function (task, callback) {
-    var name = (options.prefix || 'frame') + '_' + _this.tasks++ + '.' + options.type;
+    options.type = options.type || 'png';
+    var id = '0'.repeat(options.size.toString().length - _this.tasks.toString().length).concat(_this.tasks++);
+    var name = (options.prefix || 'frame') + '_' + id + '.' + options.type;
     var file = _fs2.default.createWriteStream(name);
     if (options['zero-byte']) {
       file.write('', 'utf8', function () {
@@ -49,7 +51,7 @@ var Queue = function Queue() {
       file.end();
     }
     file.on('finish', function () {
-      console.log('Osk is writing %s...', name);
+      console.log('Syni is writing %s...', name);
       callback();
     });
   }, options['write-with'] || 1);

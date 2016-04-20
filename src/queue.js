@@ -5,10 +5,14 @@ import bytes   from './bytes';
 
 export default class Queue {
   constructor(options={}) {
-    this.tasks = options['start-id'] || 0;
+    this.tasks = options['start-id'] || 1;
     this.queue = async.queue((task, callback) => {
-      const name = `${options.prefix || 'frame'}_${this.tasks++}.${options.type}`;
-      const file = fs.createWriteStream(name);
+      options.type = options.type || 'png';
+      const id     = '0'
+        .repeat(options.size.toString().length-(this.tasks).toString().length)
+        .concat(this.tasks++);
+      const name   = `${options.prefix || 'frame'}_${id}.${options.type}`;
+      const file   = fs.createWriteStream(name);
       if (options['zero-byte']) {
         file.write('','utf8', () => {
           setTimeout(() => {
@@ -23,7 +27,7 @@ export default class Queue {
         file.end();
       }
       file.on('finish', () => {
-        console.log('Osk is writing %s...', name);
+        console.log('Syni is writing %s...', name);
         callback();
       })
     }, options['write-with'] || 1);
