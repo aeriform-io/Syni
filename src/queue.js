@@ -7,12 +7,11 @@ export default class Queue {
   constructor(options={}) {
     this.tasks = options['start-id'] || 1;
     this.queue = async.queue((task, callback) => {
-      options.type = options.type || 'png';
-      const id     = '0'
-        .repeat(options.size.toString().length-(this.tasks).toString().length)
-        .concat(this.tasks++);
-      const name   = `${options.prefix || 'frame'}_${id}.${options.type}`;
-      const file   = fs.createWriteStream(name);
+      options.type  = options.type || 'png';
+      const diff    = options.size.toString().length-(this.tasks).toString().length,
+        id          = '0'.repeat(diff < 0 ? 0 : diff).concat(this.tasks++),
+        name        = `${options.prefix || 'frame'}_${id}.${options.type}`,
+        file        = fs.createWriteStream(name);
       if (options['zero-byte']) {
         file.write('','utf8', () => {
           setTimeout(() => {

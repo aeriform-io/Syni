@@ -34,9 +34,10 @@ var Queue = function Queue() {
   this.tasks = options['start-id'] || 1;
   this.queue = _async2.default.queue(function (task, callback) {
     options.type = options.type || 'png';
-    var id = '0'.repeat(options.size.toString().length - _this.tasks.toString().length).concat(_this.tasks++);
-    var name = (options.prefix || 'frame') + '_' + id + '.' + options.type;
-    var file = _fs2.default.createWriteStream(name);
+    var diff = options.size.toString().length - _this.tasks.toString().length,
+        id = '0'.repeat(diff < 0 ? 0 : diff).concat(_this.tasks++),
+        name = (options.prefix || 'frame') + '_' + id + '.' + options.type,
+        file = _fs2.default.createWriteStream(name);
     if (options['zero-byte']) {
       file.write('', 'utf8', function () {
         setTimeout(function () {
